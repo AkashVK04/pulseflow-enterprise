@@ -1,0 +1,6 @@
+{
+  "name": "PulseFlow Enterprise",
+  "description": "Enterprise-grade AI-powered work management, agile project execution, resource planning, and intelligent task decomposition platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
