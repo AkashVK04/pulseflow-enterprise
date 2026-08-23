@@ -132,6 +132,47 @@ PulseFlow integrates Google Gemini 3.6 Flash (`gemini-3.6-flash`) server-side vi
 
 ---
 
+## 🚢 Production Deployment Guide
+
+### Container Image
+Published container image: `ghcr.io/akashvk04/pulseflow-enterprise:latest`
+
+### Required Production Environment Variables
+| Variable | Description | Example |
+| :--- | :--- | :--- |
+| `SPRING_DATASOURCE_URL` | PostgreSQL JDBC Connection URL | `jdbc:postgresql://postgres.prod.internal:5432/pulseflow_db` |
+| `SPRING_DATASOURCE_USERNAME` | Database User | `pulseflow_admin` |
+| `SPRING_DATASOURCE_PASSWORD` | Database Password | `<secure_db_password>` |
+| `JWT_SECRET` | 256-bit HMAC signing key | `<secure_random_base64_secret_256_bits>` |
+| `GEMINI_API_KEY` | Google Gemini AI Studio API Key | `<your_gemini_api_key>` |
+
+### Exposed Ports
+- `3000`: Primary Nginx HTTP port (Serves React SPA & Proxies `/api/` + `/actuator/`)
+- `8080`: Internal Spring Boot API & Actuator port
+
+### Health Check Strategy
+Query `/actuator/health` or `/actuator/health` via Nginx (port 3000):
+```bash
+curl -f http://localhost:3000/actuator/health
+```
+
+### Docker Container Launch Command
+```bash
+docker run -d \
+  --name pulseflow-prod \
+  -p 3000:3000 \
+  -p 8080:8080 \
+  -e SPRING_DATASOURCE_URL="jdbc:postgresql://postgres-host:5432/pulseflow_db" \
+  -e SPRING_DATASOURCE_USERNAME="pulseflow_user" \
+  -e SPRING_DATASOURCE_PASSWORD="securepassword" \
+  -e JWT_SECRET="your_production_256_bit_jwt_secret" \
+  -e GEMINI_API_KEY="your_production_gemini_api_key" \
+  --restart unless-stopped \
+  ghcr.io/akashvk04/pulseflow-enterprise:latest
+```
+
+---
+
 ## 📡 API Overview Summary
 
 All API endpoints are prefixed with `/api`.
