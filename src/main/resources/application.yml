@@ -39,7 +39,7 @@ spring:
             enable: true
 
 jwt:
-  secret: ${JWT_SECRET:d292Y25pZ2h0YnJ1dGFsaXN0ZW50ZXJwcmlzZXNlY3VyZWp3dHByaXZhdGVrZXkyMDI2}
+  secret: ${JWT_SECRET:dev_only_jwt_secret_key_must_be_overridden_in_production_environment_variables}
   expiration-ms: 3600000
   refresh-expiration-ms: 604800000
 

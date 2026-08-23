@@ -32,6 +32,6 @@ COPY --from=backend-builder /app/target/pulseflow-enterprise-api-1.0.0-SNAPSHOT.
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-EXPOSE 3000 8080
+EXPOSE 3000
 
 ENTRYPOINT ["/entrypoint.sh"]
