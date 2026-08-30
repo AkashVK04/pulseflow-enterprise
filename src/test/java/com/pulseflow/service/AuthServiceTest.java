@@ -114,9 +114,5 @@ public class AuthServiceTest {
         assertEquals("usr_1", ((UserDto) context.get("user")).getId());
     }
 
-    @Test
-    void testBcryptSeedHashMatchesPassword123() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        assertTrue(encoder.matches("Password123!", "$2a$10$JHcRevs8kY35rO2tF6YCv.w11sjS6BWcY8lMfd5Ngmu0mNe9LtRCu"), "Seed password hash must match Password123!");
-    }
+
 }

@@ -40,10 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if (userOpt.isPresent()) {
                     User user = userOpt.get();
-                    String roleName = user.getRole() != null ? user.getRole().getName() : "ROLE_STAFF";
-                    if (!roleName.startsWith("ROLE_")) {
-                        roleName = "ROLE_" + roleName.toUpperCase().replace(" ", "_");
-                    }
+                    String roleName = resolveRoleAuthority(user);
 
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             user,
@@ -59,6 +56,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String resolveRoleAuthority(User user) {
+        if (user.getRole() == null) return "ROLE_STAFF";
+        
+        String roleId = user.getRole().getId();
+        if (roleId != null && roleId.startsWith("ROLE_")) {
+            return roleId;
+        }
+
+        String name = user.getRole().getName();
+        if (name != null) {
+            if (name.equalsIgnoreCase("Super Admin")) return "ROLE_SUPER_ADMIN";
+            if (name.equalsIgnoreCase("Workspace Admin")) return "ROLE_WORKSPACE_ADMIN";
+            if (name.equalsIgnoreCase("Project Manager") || name.equalsIgnoreCase("PM")) return "ROLE_PM";
+            if (name.equalsIgnoreCase("Senior Engineer")) return "ROLE_SENIOR_ENG";
+            if (name.equalsIgnoreCase("Staff Contributor")) return "ROLE_STAFF";
+            if (name.equalsIgnoreCase("Guest")) return "ROLE_GUEST";
+        }
+
+        return "ROLE_" + (name != null ? name.toUpperCase().replace(" ", "_") : "STAFF");
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {

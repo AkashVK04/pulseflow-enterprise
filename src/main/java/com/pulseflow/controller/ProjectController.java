@@ -5,6 +5,7 @@ import com.pulseflow.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,11 +18,13 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ProjectDto>> getAllProjects() {
         return ResponseEntity.ok(projectService.getAllProjects());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ProjectDto> getProjectById(@PathVariable String id) {
         return projectService.getProjectById(id)
                 .map(ResponseEntity::ok)
@@ -29,6 +32,7 @@ public class ProjectController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_WORKSPACE_ADMIN', 'ROLE_PM')")
     public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectDto request) {
         if (request.getName() == null || request.getKey() == null) {
             return ResponseEntity.badRequest().build();
@@ -37,6 +41,7 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_WORKSPACE_ADMIN', 'ROLE_PM')")
     public ResponseEntity<ProjectDto> updateProject(@PathVariable String id, @RequestBody ProjectDto request) {
         return projectService.updateProject(id, request)
                 .map(ResponseEntity::ok)

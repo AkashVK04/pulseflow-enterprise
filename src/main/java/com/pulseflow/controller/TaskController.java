@@ -6,6 +6,7 @@ import com.pulseflow.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<TaskDto>> getTasks(
             @RequestParam(required = false) String projectId,
             @RequestParam(required = false) String sprintId,
@@ -29,6 +31,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TaskDto> getTaskById(@PathVariable String id) {
         return taskService.getTaskById(id)
                 .map(ResponseEntity::ok)
@@ -36,6 +39,7 @@ public class TaskController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_PM', 'ROLE_SENIOR_ENG', 'ROLE_STAFF')")
     public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto request) {
         if (request.getTitle() == null || request.getProjectId() == null) {
             return ResponseEntity.badRequest().build();
@@ -44,6 +48,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_PM', 'ROLE_SENIOR_ENG', 'ROLE_STAFF')")
     public ResponseEntity<TaskDto> updateTask(@PathVariable String id, @RequestBody TaskDto request) {
         return taskService.updateTask(id, request)
                 .map(ResponseEntity::ok)
@@ -51,6 +56,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_PM')")
     public ResponseEntity<?> deleteTask(@PathVariable String id) {
         boolean success = taskService.deleteTask(id);
         if (!success) return ResponseEntity.notFound().build();
@@ -58,11 +64,13 @@ public class TaskController {
     }
 
     @GetMapping("/{id}/comments")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<TaskCommentDto>> getComments(@PathVariable String id) {
         return ResponseEntity.ok(taskService.getTaskComments(id));
     }
 
     @PostMapping("/{id}/comments")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_WORKSPACE_ADMIN', 'ROLE_PM', 'ROLE_SENIOR_ENG', 'ROLE_STAFF')")
     public ResponseEntity<TaskCommentDto> addComment(
             @PathVariable String id,
             @RequestBody java.util.Map<String, String> body

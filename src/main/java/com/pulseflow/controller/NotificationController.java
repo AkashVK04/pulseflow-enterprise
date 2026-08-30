@@ -2,6 +2,7 @@ package com.pulseflow.controller;
 
 import com.pulseflow.dto.NotificationItemDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Map;
 public class NotificationController {
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<NotificationItemDto>> getNotifications() {
         List<NotificationItemDto> items = List.of(
                 NotificationItemDto.builder().id("notif_1").title("Security Vulnerability Scan Completed").message("0 critical CVEs detected in recent IAM sprint build.").type("success").timestamp("12m ago").read(false).link("/audit").build(),
@@ -22,6 +24,7 @@ public class NotificationController {
     }
 
     @PutMapping("/read-all")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Map<String, Boolean>> markAllRead() {
         return ResponseEntity.ok(Map.of("success", true));
     }

@@ -7,6 +7,7 @@ import com.pulseflow.service.AuditLogService;
 import com.pulseflow.service.GeminiAiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class AiController {
     private AuditLogService auditLogService;
 
     @PostMapping("/decompose")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_PM', 'ROLE_SENIOR_ENG')")
     public ResponseEntity<AIDecomposeResultDto> decomposeTask(@RequestBody Map<String, String> body) {
         String title = body.getOrDefault("title", "Integrate Redis Resiliency Layer");
         String description = body.getOrDefault("description", "Decompose backend security and caching architecture.");
@@ -62,6 +64,7 @@ public class AiController {
     }
 
     @PostMapping("/standup")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_WORKSPACE_ADMIN', 'ROLE_PM', 'ROLE_SENIOR_ENG', 'ROLE_STAFF')")
     public ResponseEntity<AISummaryResultDto> generateStandup(@RequestBody Map<String, String> body) {
         String projectId = body.get("projectId");
 
@@ -87,6 +90,7 @@ public class AiController {
     }
 
     @PostMapping("/risk-audit")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_WORKSPACE_ADMIN', 'ROLE_PM')")
     public ResponseEntity<AIRiskAnalysisResultDto> auditProjectRisks(@RequestBody Map<String, String> body) {
         AIRiskAnalysisResultDto result = AIRiskAnalysisResultDto.builder()
                 .overallRiskScore(24)
@@ -107,6 +111,7 @@ public class AiController {
     }
 
     @PostMapping("/chat")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_WORKSPACE_ADMIN', 'ROLE_PM', 'ROLE_SENIOR_ENG', 'ROLE_STAFF')")
     public ResponseEntity<Map<String, String>> chatWithAI(@RequestBody Map<String, String> body) {
         String query = body.getOrDefault("query", "How is sprint health tracking?");
         String context = body.getOrDefault("context", "Sprint 24");

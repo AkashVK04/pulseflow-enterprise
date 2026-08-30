@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ public class ReportController {
     private AuditLogService auditLogService;
 
     @GetMapping("/tasks/csv")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_WORKSPACE_ADMIN', 'ROLE_PM')")
     public ResponseEntity<byte[]> exportTasksCsv() {
         List<TaskDto> tasks = taskService.getTasks(null, null, null, null, null);
         StringBuilder csv = new StringBuilder("Key,Title,Status,Priority,Project,Assignee,LoggedHours,EstimatedHours,DueDate\n");
@@ -51,6 +53,7 @@ public class ReportController {
     }
 
     @GetMapping("/audit/csv")
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_WORKSPACE_ADMIN')")
     public ResponseEntity<byte[]> exportAuditCsv() {
         List<AuditLogDto> logs = auditLogService.getAllAuditLogs();
         StringBuilder csv = new StringBuilder("Timestamp,Actor,Role,Action,EntityType,EntityName,Details\n");

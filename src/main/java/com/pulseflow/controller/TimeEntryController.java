@@ -5,6 +5,7 @@ import com.pulseflow.service.TimeEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -19,11 +20,13 @@ public class TimeEntryController {
     private TimeEntryService timeEntryService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<TimeEntryDto>> getTimeEntries(@RequestParam(required = false) String taskId) {
         return ResponseEntity.ok(timeEntryService.getTimeEntries(taskId));
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_SUPER_ADMIN', 'ROLE_WORKSPACE_ADMIN', 'ROLE_PM', 'ROLE_SENIOR_ENG', 'ROLE_STAFF')")
     public ResponseEntity<TimeEntryDto> addTimeEntry(@RequestBody Map<String, Object> body) {
         String taskId = (String) body.get("taskId");
         String userId = (String) body.get("userId");
