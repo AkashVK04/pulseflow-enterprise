@@ -5,9 +5,12 @@ import com.pulseflow.dto.UserDto;
 import com.pulseflow.model.User;
 import com.pulseflow.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -43,28 +46,19 @@ public class AuthService {
 
     @Transactional
     public Map<String, Object> login(String email, String password) {
-        String targetEmail = (email != null && !email.isBlank()) ? email : "sarah.connor@pulseflow.io";
-        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(targetEmail);
-
-        User user;
-        if (userOpt.isPresent()) {
-            user = userOpt.get();
-        } else {
-            // Default fallback super admin if seed data user requested
-            user = userRepository.findAll().stream().findFirst().orElseGet(() ->
-                User.builder()
-                        .id("usr_1")
-                        .name("Sarah Connor")
-                        .email(targetEmail)
-                        .avatar("https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150")
-                        .department("Executive Leadership")
-                        .accountNonLocked(true)
-                        .build()
-            );
+        if (email == null || email.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email is required");
         }
 
+        User user = userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password"));
+
         if (!Boolean.TRUE.equals(user.getAccountNonLocked())) {
-            throw new RuntimeException("Account locked due to security policy violations. Contact Super Admin.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Account is locked due to security policy violations. Contact Super Admin.");
+        }
+
+        if (password == null || user.getPasswordHash() == null || !passwordEncoder.matches(password, user.getPasswordHash())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
 
         String roleName = user.getRole() != null ? user.getRole().getName() : "Super Admin";
@@ -89,28 +83,30 @@ public class AuthService {
         return result;
     }
 
-    public Map<String, Object> getCurrentUserContext() {
-        List<User> users = userRepository.findAll();
-        User defaultUser = users.stream()
-                .filter(u -> "usr_1".equals(u.getId()) || (u.getEmail() != null && u.getEmail().contains("sarah")))
-                .findFirst()
-                .orElse(users.isEmpty() ? null : users.get(0));
-
-        if (defaultUser == null) {
-            defaultUser = User.builder()
-                    .id("usr_1")
-                    .name("Sarah Connor")
-                    .email("sarah.connor@pulseflow.io")
-                    .avatar("https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150")
-                    .department("Executive Leadership")
-                    .build();
+    public Map<String, Object> getCurrentUserContext(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated.");
         }
 
-        List<UserDto> allUsersDtos = users.stream().map(this::mapToUserDto).toList();
+        User currentUser = null;
+        if (authentication.getPrincipal() instanceof User userPrincipal) {
+            currentUser = userPrincipal;
+        } else {
+            String nameOrEmail = authentication.getName();
+            currentUser = userRepository.findByEmailIgnoreCase(nameOrEmail)
+                    .orElseGet(() -> userRepository.findById(nameOrEmail)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authenticated user not found.")));
+        }
+
+        List<UserDto> allUsersDtos = userRepository.findAll()
+                .stream()
+                .map(this::mapToUserDto)
+                .toList();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("user", mapToUserDto(defaultUser));
+        response.put("user", mapToUserDto(currentUser));
         response.put("allUsers", allUsersDtos);
+
         return response;
     }
 

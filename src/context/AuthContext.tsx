@@ -5,9 +5,12 @@ import { api } from '../lib/api.js';
 interface AuthContextType {
   currentUser: User | null;
   allUsers: User[];
+  login: (email: string, password?: string) => Promise<void>;
+  logout: () => void;
   switchUserRole: (userId: string) => void;
   hasPermission: (requiredRole: UserRole) => boolean;
   isLoading: boolean;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,18 +21,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setCurrentUser(null);
+      setIsLoading(false);
+      return;
+    }
+
     api.getAuthMe()
       .then(res => {
         setCurrentUser(res.user);
-        setAllUsers(res.allUsers);
+        if (res.allUsers) setAllUsers(res.allUsers);
       })
       .catch(err => {
-        console.error('Failed to load user auth context:', err);
+        console.warn('Authentication token invalid or expired. Clearing session:', err);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        setCurrentUser(null);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
+
+  const login = async (email: string, password?: string) => {
+    const res = await api.loginWithJWT(email, password);
+    localStorage.setItem('accessToken', res.accessToken);
+    localStorage.setItem('refreshToken', res.refreshToken);
+    setCurrentUser(res.user);
+    
+    // Fetch all workspace users for context/switchers if available
+    try {
+      const meRes = await api.getAuthMe();
+      if (meRes.allUsers) setAllUsers(meRes.allUsers);
+    } catch {
+      // Ignore secondary user list failure if login succeeded
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setCurrentUser(null);
+  };
 
   const switchUserRole = (userId: string) => {
     const target = allUsers.find(u => u.id === userId);
@@ -57,9 +91,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         currentUser,
         allUsers,
+        login,
+        logout,
         switchUserRole,
         hasPermission,
-        isLoading
+        isLoading,
+        isAuthenticated: !!currentUser
       }}
     >
       {children}

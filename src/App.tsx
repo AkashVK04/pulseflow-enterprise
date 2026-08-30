@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from './context/ThemeContext.js';
-import { AuthProvider } from './context/AuthContext.js';
+import { AuthProvider, useAuth } from './context/AuthContext.js';
 import { ProjectProvider, useProjects } from './context/ProjectContext.js';
+import { Login } from './components/auth/Login.js';
 import { Header } from './components/layout/Header.js';
 import { Sidebar } from './components/layout/Sidebar.js';
 import { OverviewDashboard } from './components/dashboard/OverviewDashboard.js';
@@ -18,8 +19,24 @@ import { AICopilotDrawer } from './components/ai/AICopilotDrawer.js';
 import { GlobalSearchModal } from './components/common/GlobalSearchModal.js';
 
 const AppContent: React.FC = () => {
+  const { isAuthenticated, isLoading } = useAuth();
   const { activeTab } = useProjects();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[var(--bg-canvas)] flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-sm font-medium text-[var(--text-secondary)]">Loading PulseFlow Session...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
 
   const renderActiveTab = () => {
     switch (activeTab) {

@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   onMobileMenuToggle,
   isMobileMenuOpen = false
 }) => {
-  const { currentUser, allUsers, switchUserRole } = useAuth();
+  const { currentUser, allUsers, switchUserRole, logout } = useAuth();
   const {
     projects,
     selectedProject,
@@ -380,11 +380,12 @@ export const Header: React.FC<HeaderProps> = ({
                   <kbd className="text-[9px] bg-[var(--bg-surface)] border px-1 font-bold">⌘K</kbd>
                 </button>
 
-                {/* Logout Placeholder */}
+                {/* Logout Action */}
                 <button
                   onClick={() => {
                     setIsProfileOpen(false);
-                    showToast('Enterprise Session Logged Out (Demo Mode)');
+                    logout();
+                    showToast('Enterprise Session Logged Out');
                   }}
                   className="w-full flex items-center gap-2 p-2 bg-[var(--status-danger-bg)] text-[var(--status-danger)] hover:bg-[var(--status-danger)] hover:text-white border border-[var(--status-danger-border)] uppercase font-bold transition-colors cursor-pointer text-[11px]"
                 >

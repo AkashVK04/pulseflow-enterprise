@@ -14,18 +14,33 @@ import {
 
 const API_BASE = '/api';
 
-async function fetchJSON<T>(url: string, options?: RequestInit): Promise<T> {
+async function fetchJSON<T>(
+  url: string,
+  options: RequestInit = {}
+): Promise<T> {
+  const token = localStorage.getItem('accessToken');
+
+  const headers = new Headers(options.headers);
+
+  headers.set('Content-Type', 'application/json');
+
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+
   const res = await fetch(`${API_BASE}${url}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers
-    },
-    ...options
+    ...options,
+    headers
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: 'Request failed' }));
-    throw new Error(err.error || `HTTP ${res.status}`);
+    const err = await res.json().catch(() => ({
+      error: 'Request failed'
+    }));
+
+    throw new Error(
+      err.error || `HTTP ${res.status}`
+    );
   }
 
   return res.json();

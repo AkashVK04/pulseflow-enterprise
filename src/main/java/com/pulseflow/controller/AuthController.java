@@ -32,8 +32,12 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message", "Password reset instructions sent to " + email));
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser() {
-        return ResponseEntity.ok(authService.getCurrentUserContext());
-    }
+  @GetMapping("/me")
+public ResponseEntity<?> getCurrentUser(
+        org.springframework.security.core.Authentication authentication) {
+
+    return ResponseEntity.ok(
+            authService.getCurrentUserContext(authentication)
+    );
+}
 }
