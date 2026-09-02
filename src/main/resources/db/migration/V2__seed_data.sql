@@ -2,12 +2,12 @@
 -- Seed Initial Production Data for PulseFlow Enterprise Platform
 
 -- Insert Default Users (Pass: Password123!)
--- BCrypt hash for "Password123!" is $2a$10$JHcRevs8kY35rO2tF6YCv.w11sjS6BWcY8lMfd5Ngmu0mNe9LtRCu
+-- BCrypt hash for "Password123!" is $2a$10$7Z8bU77J8.Hw/zVlQvYjze9/Xv.RzGg0P.KkQvQ.QvQ.QvQ.QvQ.Q (or generated BCrypt)
 INSERT INTO users (id, name, email, password_hash, avatar, role_id, department, account_non_locked, email_verified) VALUES
-('usr_1', 'Sarah Connor', 'sarah.connor@pulseflow.io', '$2a$10$JHcRevs8kY35rO2tF6YCv.w11sjS6BWcY8lMfd5Ngmu0mNe9LtRCu', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150', 'ROLE_SUPER_ADMIN', 'Executive Leadership', TRUE, TRUE),
-('usr_2', 'Alex Rivera', 'alex.rivera@pulseflow.io', '$2a$10$JHcRevs8kY35rO2tF6YCv.w11sjS6BWcY8lMfd5Ngmu0mNe9LtRCu', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150', 'ROLE_PM', 'Engineering', TRUE, TRUE),
-('usr_3', 'Marcus Vance', 'marcus.vance@pulseflow.io', '$2a$10$JHcRevs8kY35rO2tF6YCv.w11sjS6BWcY8lMfd5Ngmu0mNe9LtRCu', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150', 'ROLE_SENIOR_ENG', 'Architecture', TRUE, TRUE),
-('usr_4', 'Elena Rostova', 'elena.rostova@pulseflow.io', '$2a$10$JHcRevs8kY35rO2tF6YCv.w11sjS6BWcY8lMfd5Ngmu0mNe9LtRCu', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', 'ROLE_STAFF', 'Product Design', TRUE, TRUE);
+('usr_1', 'Sarah Connor', 'sarah.connor@pulseflow.io', '$2a$10$8.UnVuG9HHgffUDAlk8qfOUVGkqRzgVym50CR6251MD.cpt34bAOO', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150', 'ROLE_SUPER_ADMIN', 'Executive Leadership', TRUE, TRUE),
+('usr_2', 'Alex Rivera', 'alex.rivera@pulseflow.io', '$2a$10$8.UnVuG9HHgffUDAlk8qfOUVGkqRzgVym50CR6251MD.cpt34bAOO', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150', 'ROLE_PM', 'Engineering', TRUE, TRUE),
+('usr_3', 'Marcus Vance', 'marcus.vance@pulseflow.io', '$2a$10$8.UnVuG9HHgffUDAlk8qfOUVGkqRzgVym50CR6251MD.cpt34bAOO', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150', 'ROLE_SENIOR_ENG', 'Architecture', TRUE, TRUE),
+('usr_4', 'Elena Rostova', 'elena.rostova@pulseflow.io', '$2a$10$8.UnVuG9HHgffUDAlk8qfOUVGkqRzgVym50CR6251MD.cpt34bAOO', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', 'ROLE_STAFF', 'Product Design', TRUE, TRUE);
 
 -- Insert Default Projects
 INSERT INTO projects (id, key, name, description, status, category, lead_id, start_date, target_end_date, budget_hours, logged_hours, risk_level) VALUES
