@@ -97,6 +97,18 @@ public class SecurityRbacTest {
     }
 
     @Test
+    void testNoTokenGetApiDocsReturns200() throws Exception {
+        mockMvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testNoTokenGetSwaggerUiHtmlReturns3xx() throws Exception {
+        mockMvc.perform(get("/swagger-ui.html"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
     void testStaffGetProjectsReturns200() throws Exception {
         when(projectService.getAllProjects()).thenReturn(List.of());
         mockMvc.perform(get("/api/projects")

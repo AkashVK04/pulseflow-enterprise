@@ -46,7 +46,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/auth/google").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
                 // Documentation & System Telemetry
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/actuator/**").permitAll()
+                .requestMatchers(
+                    "/v3/api-docs",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/api-docs",
+                    "/api-docs/**",
+                    "/actuator/**"
+                ).permitAll()
                 
                 // Admin Feature Flags & Background Jobs
                 .requestMatchers(HttpMethod.GET, "/api/admin/feature-flags").hasAnyAuthority("ROLE_SUPER_ADMIN", "ROLE_WORKSPACE_ADMIN")
