@@ -30,7 +30,7 @@ services:
       dockerfile: Dockerfile
     container_name: pulseflow-app
     ports:
-      - "3000:3000"
+      - "3000:10000"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pulseflow_db
       SPRING_DATASOURCE_USERNAME: pulseflow_user
