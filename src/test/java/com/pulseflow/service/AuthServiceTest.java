@@ -60,6 +60,13 @@ public class AuthServiceTest {
     }
 
     @Test
+    void testBcryptPasswordMatchingForSeedUser() {
+        PasswordEncoder realEncoder = new BCryptPasswordEncoder();
+        assertTrue(realEncoder.matches("Password123!", sampleUser.getPasswordHash()),
+                "BCrypt password encoder must match 'Password123!' against stored V3 seed user password hash");
+    }
+
+    @Test
     void testMapToUserDto() {
         UserDto dto = authService.mapToUserDto(sampleUser);
         assertNotNull(dto);
