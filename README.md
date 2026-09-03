@@ -1,325 +1,310 @@
-# PulseFlow Enterprise Platform — AI-Powered Work & Agile Management Command Center
+# PulseFlow Enterprise Platform
 
-![PulseFlow Enterprise Architecture](https://img.shields.io/badge/Architecture-Spring%20Boot%203%20%7C%20React%2019%20%7C%20PostgreSQL-blue?style=for-the-badge)
-![License](https://img.shields.io/badge/License-Enterprise-emerald?style=for-the-badge)
-![Status](https://img.shields.io/badge/Verification-Passed%20100%25-brightgreen?style=for-the-badge)
+> **An enterprise-oriented, AI-powered work management, agile execution, and delivery intelligence platform.**
 
----
-
-## 📖 Executive Summary & Overview
-
-**PulseFlow Enterprise** is a high-performance, enterprise-grade work management, agile execution, and AI-assisted project intelligence platform designed for executive leaders, engineering managers, and cross-functional operations teams. Inspired by Linear, Stripe, Vercel, and GitHub Enterprise, PulseFlow delivers real-time telemetry, interactive Kanban boards, sprint tracking, effort logging, audit trails, and automated generative AI project decomposition.
+![Architecture](https://img.shields.io/badge/Architecture-Spring%20Boot%203.2%20%7C%20React%2019%20%7C%20PostgreSQL%2018-blue?style=for-the-badge)
+![Security](https://img.shields.io/badge/Security-Spring%20Security%206%20%7C%20JJWT%20%7C%20BCrypt-emerald?style=for-the-badge)
+![Build Status](https://img.shields.io/badge/Tests-24%2F24%20Passed-brightgreen?style=for-the-badge)
+![Deployment](https://img.shields.io/badge/Deployment-Render%20%7C%20Docker%20%7C%20Nginx-purple?style=for-the-badge)
 
 ---
 
-## 🎯 Problem Statement & Value Proposition
+## 📖 1. Project Overview
 
-Modern tech enterprises struggle with fragmented work management tools that separate project planning, execution, effort tracking, security auditing, and AI capabilities. PulseFlow unifies these domain verticals into a single zero-latency platform featuring:
+**PulseFlow Enterprise** is a responsive, production-ready work management and engineering intelligence platform built for modern product and operations teams. Inspired by systems like Linear, Stripe, and Vercel, PulseFlow unifies task management, agile sprint planning, interactive effort tracking, security audit logging, and server-side Generative AI insights into a single unified enterprise application.
 
-- **Executive Command Center**: Instant visibility into project health, sprint velocity, overdue work items, and team capacity.
-- **Generative AI Work Decomposition**: Instant breakdown of complex engineering initiatives into actionable subtasks with automatic effort estimation via Google Gemini 3.6 Flash.
-- **Zero-Trust Security & Compliance**: Strict Role-Based Access Control (RBAC), JWT authentication, BCrypt password hashing, and continuous audit trail logging.
-- **High-Velocity Frontend UX**: Modern dark/light high-contrast enterprise design system built with React 19, Vite, and Tailwind CSS.
+### Key Capabilities & Problem Solved
+Modern enterprise organizations often fragment operational workflows across disparate tools for task tracking, time logging, administrative security auditing, and AI capabilities. PulseFlow resolves this fragmentation by offering:
+- **Centralized Work Orchestration**: Multi-project portfolio tracking, Kanban status transitions, sprint planning, and task comments.
+- **Generative AI Engineering Intelligence**: Server-side Google Gemini 3.6 Flash integration for task decomposition, sprint standup briefings, and automated risk audits.
+- **Enterprise Security Architecture**: Role-Based Access Control (RBAC), JWT authentication, BCrypt password hashing, and continuous audit trail logging.
+- **Full-Stack Performance**: Responsive production web application with sub-100ms warm API responses observed during production testing.
 
 ---
 
-## 🏛️ System Architecture Diagram
+## 🚀 2. Live Production Deployment & Demo Access
+
+- **Live Production Domain**: [https://pulseflow-enterprise.onrender.com](https://pulseflow-enterprise.onrender.com/)
+- **Swagger / OpenAPI Interactive UI**: [https://pulseflow-enterprise.onrender.com/swagger-ui/index.html](https://pulseflow-enterprise.onrender.com/swagger-ui/index.html)
+- **OpenAPI v3 JSON Specification**: [https://pulseflow-enterprise.onrender.com/v3/api-docs](https://pulseflow-enterprise.onrender.com/v3/api-docs)
+- **Actuator Production Health**: [https://pulseflow-enterprise.onrender.com/actuator/health](https://pulseflow-enterprise.onrender.com/actuator/health)
+- **GitHub Repository**: [https://github.com/AkashVK04/pulseflow-enterprise.git](https://github.com/AkashVK04/pulseflow-enterprise.git)
+- **Verified Release Commit**: `1a0fa71`
+
+### Public Demo / Test Account
+To inspect the production platform as a Super Administrator:
+- **Email**: `sarah.connor@pulseflow.io`
+- **Password**: `Password123!`
+
+---
+
+## ✨ 3. Core Feature Matrix
+
+### 🔐 Authentication & Security Architecture
+- **JWT Session Tokens**: HMAC-SHA256 signed access and refresh tokens.
+- **BCrypt Password Hashing**: Passwords stored via 10-round salted BCrypt hashing.
+- **Spring Security 6 & RBAC**: Method-level `@PreAuthorize` guards all endpoints.
+- **401 vs 403 Enforcement**: Strict distinction between unauthenticated requests (401) and unauthorized role access attempts (403).
+
+### 📋 Project & Task Management
+- **Project Portfolios**: Key prefixes, budget hours, logged hours, and risk indicators.
+- **Kanban & Backlog**: Drag-and-drop status transitions (`Backlog` → `To Do` → `In Progress` → `In Review` → `Completed`).
+- **Subtasks & Comments**: Nested task checklists and comment discussion threads.
+
+### ⚡ Logistics & Time Tracking
+- **Sprint Manager**: Sprint velocity points tracking and iteration planning.
+- **Stopwatch Time Tracker**: Interactive live stopwatch with task assignment and effort logging.
+
+### 🛡️ Enterprise Governance & Admin
+- **Immutable Audit Trail**: Security event logging for compliance and auditing.
+- **User Provisioning & Lock Controls**: Provision users, mutate role assignments, and lock/unlock accounts.
+- **Feature Flags & Cron Jobs**: Toggle system flags dynamically and trigger background scheduled jobs.
+- **CSV Data Exporters**: Real-time CSV file generation for Task Inventories and Audit Trails.
+
+### 🤖 Generative AI Copilot (Gemini 3.6 Flash)
+- **AI Task Decomposition (`POST /api/ai/decompose`)**: Auto-decomposes tasks into subtasks with hour estimates.
+- **AI Standup Briefing (`POST /api/ai/standup`)**: Generates sprint achievement summaries and risk alerts.
+- **AI Risk Audit (`POST /api/ai/risk-audit`)**: Scans portfolio telemetry for capacity warnings and delay estimates.
+- **AI Copilot Drawer (`POST /api/ai/chat`)**: Interactive conversational assistant for workspace telemetry.
+
+---
+
+## 🏛️ 4. System Architecture
 
 ```
-                 +-------------------------------------------------------+
-                 |              React 19 + TypeScript SPA                |
-                 |         (Tailwind CSS v4, Lucide, Motion)            |
-                 +-------------------------------------------------------+
-                                             |
-                                   HTTP REST API (Bearer JWT)
-                                             |
-                                             v
-                 +-------------------------------------------------------+
-                 |            Spring Boot 3.2 (Java 21 JDK)             |
-                 |                                                       |
-                 |  +-------------------------------------------------+  |
-                 |  |       Spring Security & JwtAuthenticationFilter  |  |
-                 |  +-------------------------------------------------+  |
-                 |                           |                           |
-                 |                           v                           |
-                 |  +-------------------------------------------------+  |
-                 |  |       REST Controllers (com.pulseflow.controller)|  |
-                 |  +-------------------------------------------------+  |
-                 |                           |                           |
-                 |                           v                           |
-                 |  +-------------------------------------------------+  |
-                 |  |         Services (com.pulseflow.service)        |  |
-                 |  +-------------------------------------------------+  |
-                 |             /             |            \              |
-                 |            /              |             \             |
-                 |           v               v              v            |
-                 |  +---------------+ +--------------+ +---------------+ |
-                 |  |  Repositories | |  Flyway DDL  | | Gemini AI Svc | |
-                 |  +---------------+ +--------------+ +---------------+ |
-                 +---------|-----------------------------------|---------+
-                           |                                   |
-                           v                                   v
-             +---------------------------+            +------------------+
-             |    PostgreSQL Database    |            | Google Gemini AI |
-             |      (pulseflow_db)       |            |   3.6 Flash API  |
-             +---------------------------+            +------------------+
-```
-
-```mermaid
-graph TD
-    Client["React 19 Frontend SPA"] -->|HTTPS / REST API| AuthFilter["JwtAuthenticationFilter"]
-    AuthFilter -->|Validated Principal| Controller["Spring Boot REST Controllers"]
-    Controller --> Service["Service Layer (Business Logic & Audit Logging)"]
-    Service --> Repository["Spring Data JPA Repositories"]
-    Repository --> DB[("PostgreSQL Database (Flyway V1/V2 Schemas)")]
-    Service -->|Server-to-Server API| Gemini["Google Gemini 3.6 Flash AI Engine"]
+                                  [ USER BROWSER ]
+                                         │
+                                   HTTPS / Port 443
+                                         │
+                                         ▼
+                   ┌───────────────────────────────────────────┐
+                   │             NGINX REVERSE PROXY           │
+                   │                (Port 10000)               │
+                   └─────────────────────┬─────────────────────┘
+                                         │
+                    ┌────────────────────┴────────────────────┐
+                    │                                         │
+             Static Assets / SPA                      /api/* Proxy
+                    │                                         │
+                    ▼                                         ▼
+     ┌─────────────────────────────┐           ┌─────────────────────────────┐
+     │   React 19 + TypeScript     │           │   Spring Boot 3.2 (Java 21) │
+     │   (Vite 6, Tailwind, Lucide) │           │      (Port 8080 Internal)   │
+     └─────────────────────────────┘           └──────────────┬──────────────┘
+                                                              │
+                                        ┌─────────────────────┼─────────────────────┐
+                                        │                     │                     │
+                                        ▼                     ▼                     ▼
+                             ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐
+                             │  Spring Security  │  │ Flyway Migration  │  │ Gemini 3.6 Flash  │
+                             │  & JJWT Filter    │  │ (V1 / V2 / V3)    │  │    AI Engine      │
+                             └──────────┬────────┘  └──────────┬────────┘  └───────────────────┘
+                                        │                     │
+                                        └──────────┬──────────┘
+                                                   │
+                                                   ▼
+                                     ┌───────────────────────────┐
+                                     │    PostgreSQL 18.6 DB     │
+                                     │      (pulseflow_db)       │
+                                     └───────────────────────────┘
 ```
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ 5. Technology Stack
 
-### Frontend Stack
-- **Framework**: React 19 (TypeScript 5.8)
-- **Build Tooling**: Vite 6.4 + ESBuild server bundler
-- **Styling**: Tailwind CSS v4 + Framer Motion + Lucide Icons
-- **Data Visualization**: Recharts (Sprint burndown, velocity, budget execution)
+### Frontend
+- **Framework**: React 19.0 (`react@19.0.1`, TypeScript 5.8)
+- **Build Tooling**: Vite 6.2 (`vite@6.2.3`) + ESBuild bundler
+- **Styling & UI**: Tailwind CSS v4 (`tailwindcss@4.1.14`) + Lucide React (`lucide-react@0.546.0`)
+- **Data Visualization**: Recharts 3.10 (`recharts@3.10.1`)
 - **HTTP Client**: Native Fetch API wrapper (`src/lib/api.ts`)
 
-### Backend Stack
+### Backend
 - **Runtime**: JDK 21 (Java 21)
-- **Framework**: Spring Boot 3.2.3 (Spring Web, Spring Data JPA, Spring Security)
-- **Database Engine**: PostgreSQL 16
-- **Database Migrations**: Flyway Migration Tool (`db/migration/V1__init.sql`, `V2__seed_data.sql`)
-- **Security & JWT**: JJWT 0.12.5, BCrypt Password Hashing
-- **API Documentation**: SpringDoc OpenAPI / Swagger UI
+- **Framework**: Spring Boot 3.2.3 (Spring Web, Spring Data JPA, Spring Security 6)
+- **Database Engine**: PostgreSQL 18 (18.6)
+- **Database Migrations**: Flyway 9.22 (`db/migration/V1__init.sql`, `V2__seed_data.sql`, `V3__fix_seed_password_hashes.sql`)
+- **Security & JWT**: JJWT 0.12.5, BCrypt
+- **API Documentation**: SpringDoc OpenAPI 2.3.0 (`springdoc-openapi-starter-webmvc-ui`)
 - **Build System**: Maven (`pom.xml`)
 
+### Infrastructure
+- **Reverse Proxy**: Nginx
+- **Containerization**: Multi-stage Docker (`Dockerfile`)
+- **Cloud Host**: Render
+
 ---
 
-## 🔐 Authentication & RBAC System
+## 🔐 6. Security Architecture & RBAC Matrix
 
-### 1. Login & Token Lifecycle
-1. Client submits credentials to `POST /api/auth/login`.
-2. Backend verifies email and BCrypt password hash in PostgreSQL.
-3. Upon validation, backend generates:
-   - **Access Token**: HMAC-SHA256 signed JWT (1-hour expiration) containing `userId`, `email`, and `role`.
-   - **Refresh Token**: Cryptographically secure token (7-day expiration).
-4. Request credentials stored in browser LocalStorage / Secure Cookies.
-5. All subsequent requests attach header: `Authorization: Bearer <accessToken>`.
+### Authentication Flow
+1. Client sends credentials to `POST /api/auth/login`.
+2. Backend verifies email and BCrypt hash in PostgreSQL.
+3. Upon validation, backend returns HMAC-SHA256 signed JWT (`accessToken`).
+4. Token attached to all subsequent API calls in `Authorization: Bearer <token>` header.
+5. `JwtAuthenticationFilter` validates signature and populates `SecurityContextHolder`.
 
-### 2. Role-Based Access Control (RBAC) Matrix
+### RBAC Matrix
 
-| Role Name | Authority Scope | Permissions |
+| Role Name | Scope | Key Permissions |
 | :--- | :--- | :--- |
-| **`ROLE_SUPER_ADMIN`** | Super Admin | Full administrative access, user provisioning, feature flag toggles, background job manual execution, CSV export. |
-| **`ROLE_PM`** | Project Manager | Project creation/updates, sprint planning, task assignment, story point allocation. |
-| **`ROLE_SENIOR_ENG`** | Senior Engineer | Task status transitions, code review approvals, AI task decomposition. |
-| **`ROLE_STAFF`** | Staff Contributor | Work item execution, subtask completion, time effort logging, comment posting. |
-| **`ROLE_GUEST`** | Guest Observer | Read-only observation across executive dashboards and portfolio lists. |
+| **`ROLE_SUPER_ADMIN`** | Super Admin | Full administrative access, user provisioning, role mutation, account lock/unlock, feature flag toggles, job triggers, report downloads. |
+| **`ROLE_WORKSPACE_ADMIN`**| Workspace Admin | View feature flags & cron jobs, view security audit logs, create projects. |
+| **`ROLE_PM`** | Project Manager | Project creation/update, sprint planning, task assignment, task deletion (`DELETE /api/tasks/{id}`). |
+| **`ROLE_SENIOR_ENG`** | Senior Engineer | Task creation/update, Kanban status drag, AI task decomposition. |
+| **`ROLE_STAFF`** | Staff Contributor | Work item execution, subtask checklist, effort logging, comment posting. |
+| **`ROLE_GUEST`** | Guest Observer | Read-only observation across executive dashboard, portfolio, and task backlog. |
 
 ---
 
-## 🤖 Gemini AI Features & Architecture
+## 🗄️ 7. Database & Flyway Schema
 
-PulseFlow integrates Google Gemini 3.6 Flash (`gemini-3.6-flash`) server-side via `GeminiAiService.java`:
-
-- **Task Decomposition (`POST /api/ai/decompose`)**: Accepts high-level task titles and descriptions, decomposing them into granular subtasks with estimated hours and risk assessments.
-- **Sprint Brief (`POST /api/ai/standup`)**: Generates automated executive summary reports detailing achievements, velocity, blockers, and recommended actions.
-- **Project Risk Audit (`POST /api/ai/risk-audit`)**: Scans portfolio telemetry to detect capacity bottlenecks, overdue items, and vulnerability vectors.
-- **Copilot Chat (`POST /api/ai/chat`)**: Context-aware interactive assistant helping engineers and project leads query workspace metrics and task schedules.
-- **Resiliency & Fallbacks**: If external API limits are reached, the system gracefully degrades to cached telemetry analysis without interrupting user workflow.
+### Migration History
+- **`V1__init.sql`**: Initializes core relational schema (`roles`, `users`, `projects`, `sprints`, `tasks`, `task_comments`, `time_entries`, `audit_logs`).
+- **`V2__seed_data.sql`**: Inserts baseline enterprise seed records (Checksum `-1712630814` preserved).
+- **`V3__fix_seed_password_hashes.sql`**: Updates seed user BCrypt password hashes to match `Password123!`.
 
 ---
 
-## 🚢 Production Deployment Guide
+## 🤖 8. Gemini AI Integration
 
-### Container Image
-Published container image: `ghcr.io/akashvk04/pulseflow-enterprise:latest`
-
-### Required Production Environment Variables
-| Variable | Description | Example |
-| :--- | :--- | :--- |
-| `SPRING_DATASOURCE_URL` | PostgreSQL JDBC Connection URL | `jdbc:postgresql://postgres.prod.internal:5432/pulseflow_db` |
-| `SPRING_DATASOURCE_USERNAME` | Database User | `pulseflow_admin` |
-| `SPRING_DATASOURCE_PASSWORD` | Database Password | `<your_db_password>` |
-| `JWT_SECRET` | 256-bit HMAC signing key | `<your_jwt_secret>` |
-| `GEMINI_API_KEY` | Google Gemini AI Studio API Key | `<your_gemini_api_key>` |
-
-### Exposed Ports
-- `3000`: Primary Nginx HTTP port (Serves React SPA & Proxies `/api/` + `/actuator/`)
-
-### Health Check Strategy
-Query `/actuator/health` via Nginx (port 3000):
-```bash
-curl -f http://localhost:3000/actuator/health
-```
-
-### Docker Container Launch Command
-```bash
-docker run -d \
-  --name pulseflow-prod \
-  -p 3000:3000 \
-  -e SPRING_DATASOURCE_URL="jdbc:postgresql://postgres-host:5432/pulseflow_db" \
-  -e SPRING_DATASOURCE_USERNAME="pulseflow_user" \
-  -e SPRING_DATASOURCE_PASSWORD="<your_db_password>" \
-  -e JWT_SECRET="<your_jwt_secret>" \
-  -e GEMINI_API_KEY="<your_gemini_api_key>" \
-  --restart unless-stopped \
-  ghcr.io/akashvk04/pulseflow-enterprise:latest
-```
+PulseFlow integrates Google Gemini 3.6 Flash (`gemini-3.6-flash`) server-side in `GeminiAiService.java`:
+- **Task Decomposition (`POST /api/ai/decompose`)**: Accepts task prose, returning structured subtasks with estimated hours.
+- **Sprint Brief (`POST /api/ai/standup`)**: Analyzes active sprint telemetry to generate achievement lists and risk warnings.
+- **Project Risk Audit (`POST /api/ai/risk-audit`)**: Evaluates portfolio health, outputting a numerical risk score and delay estimate.
+- **Copilot Chat (`POST /api/ai/chat`)**: Context-aware interactive assistant answering queries on sprint velocity and task status.
 
 ---
 
-## 📡 API Overview Summary
-
-All API endpoints are prefixed with `/api`.
-
-| Method | Endpoint | Auth | Role | Request Body | Response DTO | Purpose |
-| :--- | :--- | :---: | :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/login` | ❌ | Any | `{email, password}` | `{user, accessToken, refreshToken, expiresIn}` | User authentication |
-| `POST` | `/api/auth/google` | ❌ | Any | `{idToken}` | `{user, accessToken, provider}` | OAuth2 Google Login |
-| `GET` | `/api/auth/me` | ✅ | Any | — | `{user, allUsers}` | Current user context & user directory |
-| `GET` | `/api/projects` | ✅ | Any | — | `List<ProjectDto>` | Retrieve project portfolio |
-| `POST` | `/api/projects` | ✅ | PM/Admin | `ProjectDto` | `ProjectDto` | Create project |
-| `PUT` | `/api/projects/{id}` | ✅ | PM/Admin | `ProjectDto` | `ProjectDto` | Update project metadata |
-| `GET` | `/api/sprints` | ✅ | Any | `?projectId={id}` | `List<SprintDto>` | Fetch sprint iterations |
-| `POST` | `/api/sprints` | ✅ | PM/Admin | `SprintDto` | `SprintDto` | Plan new sprint |
-| `GET` | `/api/tasks` | ✅ | Any | `?projectId=&status=&search=` | `List<TaskDto>` | Query task inventory |
-| `POST` | `/api/tasks` | ✅ | Any | `TaskDto` | `TaskDto` | Create work item |
-| `PUT` | `/api/tasks/{id}` | ✅ | Any | `TaskDto` | `TaskDto` | Update task & Kanban status |
-| `DELETE` | `/api/tasks/{id}` | ✅ | PM/Admin | — | `{message}` | Soft-delete task |
-| `GET` | `/api/tasks/{id}/comments` | ✅ | Any | — | `List<TaskCommentDto>` | Fetch task discussion comments |
-| `POST` | `/api/tasks/{id}/comments` | ✅ | Any | `{content}` | `TaskCommentDto` | Add comment to task |
-| `GET` | `/api/time-entries` | ✅ | Any | `?taskId={id}` | `List<TimeEntryDto>` | Query logged time entries |
-| `POST` | `/api/time-entries` | ✅ | Any | `{taskId, hours, description}` | `TimeEntryDto` | Log work effort hours |
-| `GET` | `/api/workspaces/metrics` | ✅ | Any | — | `WorkspaceMetricsDto` | Compute executive metrics |
-| `GET` | `/api/search` | ✅ | Any | `?q={query}` | `List<GlobalSearchResultDto>` | Global search index |
-| `GET` | `/api/audit-logs` | ✅ | Admin | — | `List<AuditLogDto>` | Retrieve system audit log |
-| `GET` | `/api/admin/feature-flags` | ✅ | Admin | — | `List<FeatureFlagDto>` | Get system feature flags |
-| `PUT` | `/api/admin/feature-flags/{key}` | ✅ | Admin | — | `FeatureFlagDto` | Toggle feature flag |
-| `GET` | `/api/admin/background-jobs` | ✅ | Admin | — | `List<BackgroundJobDto>` | Monitor cron background jobs |
-| `POST` | `/api/admin/background-jobs/{id}/trigger` | ✅ | Admin | — | `BackgroundJobDto` | Manually trigger job |
-| `GET` | `/api/reports/tasks/csv` | ✅ | Any | — | `CSV File` | Download task inventory CSV |
-| `GET` | `/api/reports/audit/csv` | ✅ | Admin | — | `CSV File` | Download security audit CSV |
-| `POST` | `/api/ai/decompose` | ✅ | Any | `{title, description}` | `AIDecomposeResultDto` | AI task decomposition |
-| `POST` | `/api/ai/standup` | ✅ | Any | `{projectId}` | `AISummaryResultDto` | AI sprint summary report |
-| `POST` | `/api/ai/risk-audit` | ✅ | Any | `{projectId}` | `AIRiskAnalysisResultDto` | AI risk audit scanner |
-| `POST` | `/api/ai/chat` | ✅ | Any | `{query, context}` | `{response}` | AI Copilot interactive chat |
-
----
-
-## 🗄️ Database Architecture & Flyway Migrations
-
-### Tables Schema Overview
-1. `roles` (PK: `id`) — System security roles (`ROLE_SUPER_ADMIN`, `ROLE_PM`, `ROLE_SENIOR_ENG`, `ROLE_STAFF`, `ROLE_GUEST`).
-2. `users` (PK: `id`, FK: `role_id`) — User credentials, department, and account lock status.
-3. `projects` (PK: `id`, FK: `lead_id`) — Enterprise projects, key prefix, budget hours, logged hours, risk level.
-4. `sprints` (PK: `id`, FK: `project_id`) — Active/Planned sprints, total points, completed points.
-5. `tasks` (PK: `id`, FK: `project_id`, `sprint_id`, `assignee_id`, `reporter_id`) — Work items, JSONB `tags`, JSONB `subtasks`, priority, status.
-6. `task_comments` (PK: `id`, FK: `task_id`, `author_id`) — Task discussion comments thread.
-7. `time_entries` (PK: `id`, FK: `task_id`, `user_id`) — Work log entries with logged hours and dates.
-8. `audit_logs` (PK: `id`) — Security audit trail logging actor ID, action, entity type, and IP address.
-9. `feature_flags` (PK: `flag_key`) — Toggle flags for experimental features.
-
-### Database Indexing
-- `idx_users_email` ON `users(email)`
-- `idx_projects_key` ON `projects(key)`
-- `idx_tasks_project` ON `tasks(project_id)`
-- `idx_tasks_sprint` ON `tasks(sprint_id)`
-- `idx_tasks_assignee` ON `tasks(assignee_id)`
-- `idx_tasks_status` ON `tasks(status)`
-- `idx_audit_logs_created` ON `audit_logs(created_at DESC)`
-
----
-
-## 🚀 Local Development Setup & Commands
+## 💻 9. Local Development Setup
 
 ### Prerequisites
-- Java 21 JDK installed (`java -version`)
-- Node.js 18+ & npm (`node -v`)
-- PostgreSQL 16 running locally on port 5432 (`pulseflow_db`)
+- Java 21 JDK (`java -version`)
+- Node.js 20+ & npm (`node -v`)
+- PostgreSQL 18 running on port 5432 (`pulseflow_db`)
 
-### 1. Database Setup
-```sql
-CREATE DATABASE pulseflow_db;
-CREATE USER pulseflow WITH PASSWORD 'pulseflow_pass';
-GRANT ALL PRIVILEGES ON DATABASE pulseflow_db TO pulseflow;
+### Environment Setup (`.env`)
+Create a `.env` file in the project root (do not commit):
+```env
+VITE_API_URL=/api
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/pulseflow_db
+SPRING_DATASOURCE_USERNAME=pulseflow_user
+SPRING_DATASOURCE_PASSWORD=pulseflow_password
+JWT_SECRET=your_dev_jwt_secret_key_at_least_256_bits_long
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
-### 2. Running Backend (Spring Boot)
+### Backend Launch
 ```bash
-# Clean compile & run Spring Boot application
 mvn clean spring-boot:run
 ```
-The backend starts on `http://localhost:8080`.
+Backend starts on `http://localhost:8080`.
 
-### 3. Running Frontend (React + Vite)
+### Frontend Launch
 ```bash
-# Install NPM dependencies
 npm install
-
-# Start Vite development server
 npm run dev
 ```
-The frontend SPA opens at `http://localhost:3000`.
+Frontend Vite dev server starts on `http://localhost:3000`.
 
 ---
 
-## 🧪 Testing & Production Build Commands
+## 🐳 10. Docker Architecture
 
-### Run Backend Unit & Integration Tests
-```bash
-mvn clean test
-```
-
-### Build Executable Spring Boot JAR
-```bash
-mvn clean package -DskipTests
-```
-Output artifact: `target/pulseflow-enterprise-api-1.0.0-SNAPSHOT.jar`
-
-### Run Frontend Type Check & Linting
-```bash
-npm run lint
-```
-
-### Create Frontend Production Build
-```bash
-npm run build
-```
-Output directory: `dist/`
+The project uses a multi-stage `Dockerfile`:
+1. **Stage 1 (Frontend Build)**: Compiles React 19 TypeScript source via Vite into `dist/`.
+2. **Stage 2 (Backend Build)**: Packages Spring Boot 3.2 application into executable JAR (`pom.xml`).
+3. **Stage 3 (Nginx Runtime)**: Embeds Java 21 JRE and Nginx into a single container. Nginx listens on port 10000, serving static SPA files and proxying `/api/*` and `/actuator/*` to Spring Boot on port 8080.
 
 ---
 
-## 🎬 5-Minute Demo Presentation Guide
+## 🧪 11. Verification & Test Suite Results
 
-1. **Executive Command Center Dashboard (0:00 - 1:30)**:
-   - Present the KPI metric cards (Active Projects, Task Completion Rate, Overdue Critical Tasks, Total Hours Logged).
-   - Demonstrate Recharts sprint velocity charts and active AI Copilot risk audit drawer.
-2. **Projects Portfolio & Filtering (1:30 - 2:30)**:
-   - Navigate to `/projects`, showcase project key badges (`SEC`, `CLOUD`, `DATA`), budget vs logged progress bars, and risk tags.
-   - Click **Create Project** to demonstrate project creation.
-3. **Agile Kanban Board & Status Transitions (2:30 - 3:45)**:
-   - Open `/kanban`, demonstrate status column transitions (`Backlog` → `To Do` → `In Progress` → `In Review` → `Completed`).
-   - Open Task Details modal, add a comment thread, and log effort hours.
-4. **Generative AI Work Decomposition (3:45 - 4:30)**:
-   - Click **Decompose with AI** button on a task. Show Gemini AI auto-generating subtask checklists, estimated hours, and recommended engineering roles.
-5. **Admin Controls, Audit Trail & CSV Export (4:30 - 5:00)**:
-   - Navigate to `/admin`, toggle Feature Flags, view the live security audit log, and click **Export Audit CSV**.
+- **Backend Test Suite (`mvn test`)**: **24 / 24 Passed** (0 Failures, 0 Errors, 0 Skipped)
+  - `SecurityRbacTest`: 14/14 passed
+  - `AuthServiceTest`: 6/6 passed
+  - `ProjectServiceTest`: 2/2 passed
+  - `TaskServiceTest`: 2/2 passed
+- **Frontend Type Check (`npm run lint` / `tsc --noEmit`)**: **0 Errors**
+- **Vite Production Build (`npm run build`)**: **Success** (`dist/` generated)
+- **Actuator Production Health**: `200 OK` (`status: UP`)
+- **Flyway Migrations**: 3/3 validated successfully
 
 ---
 
-## 📊 Final Verification Status
+## ⚠️ 12. Known Non-Blocking Limitations
 
-| Audit Checklist Item | Result | Output |
-| :--- | :---: | :--- |
-| **Backend Java 21 Compilation** | ✅ PASSED | `mvn clean compile` — 0 Errors |
-| **Backend Unit Tests** | ✅ PASSED | `mvn clean test` — 5/5 Passed (`AuthServiceTest`, `ProjectServiceTest`) |
-| **Backend Executable JAR** | ✅ PASSED | `mvn clean package` — `pulseflow-enterprise-api-1.0.0-SNAPSHOT.jar` |
-| **Frontend TypeScript Lint** | ✅ PASSED | `npm run lint` — 0 Errors (`tsc --noEmit`) |
-| **Frontend Production Bundle** | ✅ PASSED | `npm run build` — `dist/` bundle created |
-| **PostgreSQL & Flyway Migrations** | ✅ PASSED | `V1__init.sql` & `V2__seed_data.sql` verified |
-| **Security Audit** | ✅ PASSED | JWT HMAC-SHA256, BCrypt, RBAC filters verified |
+1. **In-Memory Notification List**: System alerts in `NotificationController.java` are generated in controller memory.
+2. **Task Delete UI Exposure**: The `DELETE /api/tasks/{id}` endpoint is functional and RBAC-guarded on backend, but not exposed via a button in the UI.
+3. **Render Cold Start**: Idle free-tier Render containers take ~30–50s to cold-start.
+4. **Gemini API Key Dependency**: AI features degrade gracefully if external API key is unconfigured.
 
-**PulseFlow Enterprise Platform is fully verified and ready for production deployment.** 🚀
+---
+
+## 🗺️ 13. Future Roadmap
+
+- Persistent notifications database table (`V4__notifications_table.sql`).
+- Expose Task Delete confirmation button in `TaskDetailModal.tsx`.
+- Pagination support for task backlogs exceeding 100 items.
+- Additional enterprise report export formats.
+
+---
+
+## 📁 14. Project Directory Structure
+
+```text
+pulseflow-enterprise/
+├── src/
+│   ├── main/
+│   │   ├── java/com/pulseflow/
+│   │   │   ├── config/          # Spring Security, JwtAuthenticationFilter, JwtTokenProvider
+│   │   │   ├── controller/      # REST Controllers (Auth, Admin, Project, Task, AI, etc.)
+│   │   │   ├── dto/             # Data Transfer Objects
+│   │   │   ├── model/           # JPA Entities (User, Project, Task, Sprint, etc.)
+│   │   │   ├── repository/      # Spring Data JPA Repositories
+│   │   │   └── service/         # Business Logic & Gemini AI Services
+│   │   └── resources/
+│   │       ├── application.yml  # Spring Configuration
+│   │       └── db/migration/    # Flyway Migrations (V1, V2, V3)
+│   ├── test/java/com/pulseflow/ # JUnit 5 Security & Integration Tests
+│   ├── components/              # React UI Views (Dashboard, Kanban, Tasks, Admin, AI)
+│   ├── context/                 # AuthContext & ProjectContext Providers
+│   ├── lib/                     # API Fetch Client (api.ts)
+│   ├── types/                   # TypeScript Type Definitions
+│   └── App.tsx                  # Root React Application
+├── Dockerfile                   # Multi-stage Container Build Specification
+├── entrypoint.sh                # Nginx & Spring Boot Dual Process Launcher
+├── nginx.conf                   # Nginx Reverse Proxy Config
+├── pom.xml                      # Maven Backend Dependencies
+├── package.json                 # Frontend NPM Dependencies
+├── tsconfig.json                # TypeScript Config
+└── vite.config.ts               # Vite Bundler Config
+```
+
+---
+
+## 💼 15. Portfolio Summary (For Recruiters)
+
+The **PulseFlow Enterprise Platform** demonstrates full-stack software engineering capability across modern enterprise architecture:
+- **Backend Core**: Java 21, Spring Boot 3, Spring Security 6, Spring Data JPA, Hibernate ORM, and Maven.
+- **Frontend Architecture**: React 19, TypeScript, Vite, Tailwind CSS, Recharts, and Context API state management.
+- **Security & Authorization**: JWT authentication, BCrypt hashing, fine-grained RBAC with Spring `@PreAuthorize`, and 401/403 security handling.
+- **Relational Data & Migrations**: PostgreSQL 18 with Flyway schema versioning and checksum validation.
+- **Generative AI Integration**: Google Gemini 3.6 Flash server-side integration for task decomposition and risk telemetry.
+- **DevOps & Cloud**: Docker multi-stage containerization, Nginx reverse proxying, and cloud deployment on Render.
+
+---
+
+## 📷 16. UI Screenshot Showcase Guide
+
+1. **Login View (`/login`)**: Email/Password form, branded dark header, quick demo user selection buttons (`Sarah Connor`).
+2. **Executive Overview Dashboard (`/dashboard`)**: 8 KPI cards (Active Projects, Sprint Progress, Tasks Completed, AI Risk Score), Recharts Bar & Pie graphs, AI Brief banner.
+3. **Projects Portfolio (`/projects`)**: Project cards with key badges (`SEC`, `CLOUD`, `DATA`), logged vs budget progress bars, and risk tags.
+4. **Agile Kanban Board (`/kanban`)**: 5 Kanban columns (`Backlog`, `To Do`, `In Progress`, `In Review`, `Completed`) with task cards.
+5. **Task Execution Console Modal (`/tasks`)**: Task title, priority badge, subtask checklist, effort logger, comment thread.
+6. **Gemini AI Task Decomposition**: Auto-generated subtasks with estimated hours inside task detail modal.
+7. **Interactive Stopwatch Time Tracker (`/time`)**: Live digital stopwatch widget, task picker, work note input, work log history table.
+8. **Gemini AI Copilot Drawer**: Slide-out AI Copilot drawer with chat stream and preset prompt chips ("SPRINT BRIEFING", "RISK AUDIT").
+9. **Admin Portal & RBAC Control (`/admin`)**: User provisioning table, role dropdowns (`Super Admin`, `PM`, `Senior Engineer`), feature flags, background job triggers.
+10. **Security & Audit Logs (`/audit`)**: Immutable audit trail table and CSV export button.
