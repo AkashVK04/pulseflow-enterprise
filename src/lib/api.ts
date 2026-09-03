@@ -12,7 +12,7 @@ import {
   AIRiskAnalysisResult
 } from '../types/index.js';
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 async function fetchJSON<T>(
   url: string,
